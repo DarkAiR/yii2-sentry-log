@@ -1,0 +1,25 @@
+{
+    "name": "DarkAiR/yii2-sentry-log",
+    "description": "Simple Yii2 Sentry logger (http://getsentry.com)",
+    "authors": [
+        {
+            "name": "Pieter Venter",
+            "email": "boontjiesa@gmail.com"
+        },
+        {
+            "name": "RoliesTheBee",
+            "homepage": "https://github.com/rolies106"
+        },
+        {
+            "name": "DarkAiR",
+            "email": "darkair@list.ru"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "raven/raven": "~0.8"
+    },
+    "require-dev": {
+        "yiisoft/yii2": "*"
+    }
+}
