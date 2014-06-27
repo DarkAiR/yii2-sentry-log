@@ -3,14 +3,6 @@
     "description": "Simple Yii2 Sentry logger (http://getsentry.com)",
     "authors": [
         {
-            "name": "Pieter Venter",
-            "email": "boontjiesa@gmail.com"
-        },
-        {
-            "name": "RoliesTheBee",
-            "homepage": "https://github.com/rolies106"
-        },
-        {
             "name": "DarkAiR",
             "email": "darkair@list.ru"
         }
