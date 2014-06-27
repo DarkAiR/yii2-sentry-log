@@ -1,5 +1,5 @@
 {
-    "name": "DarkAiR/yii2-sentry-log",
+    "name": "darkair/yii2-sentry-log",
     "description": "Simple Yii2 Sentry logger (http://getsentry.com)",
     "authors": [
         {
