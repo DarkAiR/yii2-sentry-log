@@ -5,18 +5,22 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\log;
+namespace sentry;
 
 use Yii;
-use yii\base\InvalidConfigException;
+use yii\log;
 
 /**
  * SentryTarget stores log messages in a sentry
  *
+ * Stores the message can be a string or an array:
+ *  [[msg]] - text message
+ *  [[data]] - data for sending to a sentry
+ *
  * @author Dmitry DarkAiR Romanov <darkair@list.ru>
  * @since 1.0
  */
-class SentryTarget extends Target
+class SentryTarget extends yii\log\Target
 {
     /**
      * @var string dsn for sentry access
@@ -37,8 +41,6 @@ class SentryTarget extends Target
     public function init()
     {
         parent::init();
-        var_dump($this->dsn);
-        die;
         $this->client = new \Raven_Client($this->dsn);
     }
 
@@ -49,19 +51,34 @@ class SentryTarget extends Target
     {
         foreach ($this->messages as $message) {
             list($msg, $level, $catagory, $timestamp, $traces) = $message;
-            echo '<pre>';
-            var_dump($message);
-            die;
-            /*
-            self::$client->captureMessage(
+
+            $errStr = '';
+            $options = [
+                'level' => yii\log\Logger::getLevelName($level),
+                'extra' => [],
+            ];
+            $templateData = null;
+            if (is_array($msg)) {
+                $errStr = isset($msg['msg']) ? $msg['msg'] : '';
+                if (isset($msg['data']))
+                    $options['extra'] = $msg['data']; 
+            } else {
+                $errStr = $msg;
+            }
+
+            // Store debug trace in extra data
+            $options['extra']['traces'] = array_map(
+                function($v) {
+                    return "{$v['file']} in {$v['class']}::{$v['function']} at line {$v['line']}";
+                },
+                $traces
+            );
+            $this->client->captureMessage(
                 $errStr,
                 array(),
-                array(
-                    'level' => $errLevel,
-                    'extra' => $templateData
-                ),
-                $isStack
-            );*/
+                $options,
+                false
+            );
         }
     }
 }
