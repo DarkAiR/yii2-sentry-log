@@ -1,7 +1,7 @@
 yii2-sentry-log
 ===============
 
-Yii2 Sentry target for logging based on Raven client
+Yii2 Sentry target for logging based on Raven client.
 
 ## Installation
 
@@ -52,3 +52,8 @@ Yii::error([
     'data' => [...],                // Any pair key=>value for adding to the sentry message 
 ]);
 ```
+
+## Note
+
+Because the mechanism of logging is asyncronical, standard sentry stacktrace is unavailable.
+But this extension sends logger stacktrace in extra parameters of message.

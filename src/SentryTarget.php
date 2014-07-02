@@ -18,7 +18,6 @@ use yii\log;
  *  [[data]] - data for sending to a sentry
  *
  * @author Dmitry DarkAiR Romanov <darkair@list.ru>
- * @since 1.0
  */
 class SentryTarget extends yii\log\Target
 {
