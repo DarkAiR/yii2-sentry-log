@@ -44,6 +44,24 @@ class SentryTarget extends yii\log\Target
     }
 
     /**
+     * Processes the given log messages.
+     * This method will filter the given messages with [[levels]] and [[categories]].
+     * And if requested, it will also export the filtering result to specific medium (e.g. email).
+     * @param array $messages log messages to be processed. See [[Logger::messages]] for the structure
+     * of each message.
+     * @param boolean $final whether this method is called at the end of the current application
+     */
+    public function collect($messages, $final)
+    {
+        $this->messages = array_merge($this->messages, $this->filterMessages($messages, $this->getLevels(), $this->categories, $this->except));
+        $count = count($this->messages);
+        if ($count > 0 && ($final || $this->exportInterval > 0 && $count >= $this->exportInterval)) {
+            $this->export();
+            $this->messages = [];
+        }
+    }
+
+    /**
      * Stores log messages to sentry.
      */
     public function export()
@@ -66,12 +84,15 @@ class SentryTarget extends yii\log\Target
             }
 
             // Store debug trace in extra data
-            $options['extra']['traces'] = array_map(
+            $traces = array_map(
                 function($v) {
-                    return "{$v['file']} in {$v['class']}::{$v['function']} at line {$v['line']}";
+                    return "{$v['file']}".PHP_EOL."{$v['class']}::{$v['function']} [{$v['line']}]";
                 },
                 $traces
             );
+            if (!empty($traces))
+                $options['extra']['traces'] = $traces;
+
             $this->client->captureMessage(
                 $errStr,
                 array(),
