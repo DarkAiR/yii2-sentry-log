@@ -9,6 +9,7 @@ namespace sentry;
 
 use Yii;
 use yii\log;
+use yii\log\Target;
 
 /**
  * SentryTarget stores log messages in a sentry
@@ -19,7 +20,7 @@ use yii\log;
  *
  * @author Dmitry DarkAiR Romanov <darkair@list.ru>
  */
-class SentryTarget extends yii\log\Target
+class SentryTarget extends Target
 {
     /**
      * @var string dsn for sentry access
